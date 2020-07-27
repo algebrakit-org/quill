@@ -8,6 +8,7 @@ import Selection, { Range } from './selection';
 import instances from './instances';
 import logger from './logger';
 import Theme from './theme';
+import { getRange } from './shadow-selection-polyfill';
 
 const debug = logger('quill');
 
@@ -302,7 +303,11 @@ class Quill {
   getSelection(focus = false) {
     if (focus) this.focus();
     this.update(); // Make sure we access getRange with editor in consistent state
-    return this.selection.getRange()[0];
+    let range = this.selection.getRange()[0];
+    if (!range) {
+      range = getRange(this.root.getRootNode());
+    }
+    return range;
   }
 
   getSemanticHTML(index = 0, length = this.getLength() - index) {

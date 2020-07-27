@@ -260,7 +260,7 @@ export function internalGetShadowSelection(root) {
   const range = document.createRange();
 
   const s = window.getSelection();
-  if (!s.containsNode(root.host, true)) {
+  if (s.type === 'None') {
     return { range: null, mode: 'none' };
   }
 
@@ -268,6 +268,9 @@ export function internalGetShadowSelection(root) {
   // text nodes (in fact it returns true for all text nodes on the page?!).
 
   // insert a fake 'before' node to see if it's selected
+  if (root.body) {
+    root = root.body;
+  }
   root.insertBefore(fakeSelectionNode, root.childNodes[0]);
   const includesBeforeRoot = s.containsNode(fakeSelectionNode);
   fakeSelectionNode.remove();
