@@ -3,7 +3,7 @@ import clone from 'clone';
 import equal from 'deep-equal';
 import Emitter from './emitter';
 import logger from './logger';
-import { SHADOW_SELECTIONCHANGE, getRange } from './shadow-selection-polyfill';
+import { eventName as SHADOW_SELECTIONCHANGE, getRange } from './shadow';
 
 const debug = logger('quill:selection');
 
