@@ -271,7 +271,7 @@ export function getRange(root) {
 
 const fakeSelectionNode = document.createTextNode('');
 export function internalGetShadowSelection(root) {
-  let range = document.createRange();
+  const range = document.createRange();
 
   const s = window.getSelection();
   if (s.type === 'None') {
