@@ -347,7 +347,14 @@ class Selection {
         range.setStart(startNode, startOffset);
         range.setEnd(endNode, endOffset);
         selection.removeAllRanges();
-        selection.addRange(range);
+
+        //In safari, addRange using a range that refers to nodes inside a shadowRoot will not work
+        if (selection.getComposedRanges && selection.setBaseAndExtent) {
+          selection.setBaseAndExtent(startNode, startOffset, endNode, endOffset);
+        }
+        else {
+          selection.addRange(range);
+        }
       }
     } else {
       selection.removeAllRanges();
