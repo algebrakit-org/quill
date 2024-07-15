@@ -73,7 +73,7 @@ const addInternalListener = (() => {
     document.addEventListener('selectionchange', () => {
       document.dispatchEvent(new CustomEvent(SHADOW_SELECTIONCHANGE));
     });
-    return () => {};
+    return () => { };
   }
 
   let withinInternals = false;
@@ -239,6 +239,20 @@ export function getRange(root) {
   if (hasSelection || useDocument) {
     const s = (useDocument ? document : root).getSelection();
     return s.rangeCount ? s.getRangeAt(0) : null;
+  }
+  else {
+    //Newer versions of safari have a getComposedRanges method that can be used to get the range inside a shadow root
+    let s = document.getSelection();
+    if (s.getComposedRanges) {
+      const composedRanges = s.getComposedRanges(root)
+      if (composedRanges && composedRanges.length > 0) {
+        const range = document.createRange();
+        const composedRange = composedRanges[0];
+        range.setStart(composedRange.startContainer, composedRange.startOffset);
+        range.setEnd(composedRange.endContainer, composedRange.endOffset);
+        return range;
+      }
+    }
   }
 
   const thisFrame = cachedRange.get(root);
