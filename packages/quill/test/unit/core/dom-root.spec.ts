@@ -298,7 +298,7 @@ describe('DOMRoot', () => {
       const domRoot = DOMRoot(shadowContainer);
 
       const selection = domRoot.getSelection();
-      expect(selection).toBe(document.getSelection());
+      expect(selection).toStrictEqual(document.getSelection());
     });
 
     test('createRange works', () => {
